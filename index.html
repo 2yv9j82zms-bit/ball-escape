@@ -8,6 +8,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Ball Escape">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png">
 <title>Idle Ball Escape</title>
 <style>
   :root { color-scheme: dark; }
@@ -333,21 +336,9 @@
   ui.classList.remove('hidden');
   requestAnimationFrame(frame);
 
-  // Иконка для экрана «Домой», рисуется кодом (без отдельных файлов)
-  try {
-    const ic = document.createElement('canvas'); ic.width = ic.height = 180;
-    const x = ic.getContext('2d');
-    const gr = x.createLinearGradient(0, 0, 0, 180); gr.addColorStop(0, '#15122e'); gr.addColorStop(1, '#0a1a2a');
-    x.fillStyle = gr; x.fillRect(0, 0, 180, 180);
-    x.lineWidth = 9; x.lineCap = 'round';
-    ['#ff5e7e', '#7b5cff', '#7fd8ff'].forEach((c, i) => {
-      x.strokeStyle = c; x.beginPath();
-      x.ellipse(90, 65 + i * 30, 54, 16, 0, 0.7 + i * 0.9, 5.6 + i * 0.9); x.stroke();
-    });
-    x.fillStyle = '#fff'; x.beginPath(); x.arc(90, 146, 12, 0, 6.2832); x.fill();
-    const l = document.createElement('link'); l.rel = 'apple-touch-icon'; l.href = ic.toDataURL('image/png');
-    document.head.appendChild(l);
-  } catch (e) {}
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
 })();
 </script>
 </body>
